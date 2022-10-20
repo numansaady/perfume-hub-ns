@@ -1,9 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from 'next/head';
 import Link from 'next/link';
+import { useContext } from 'react';
+import { Store } from '../utils/Store';
 
 const Layout = ({ title, children }) => {
-    console.log(children)
+    const {state, dispatch} = useContext(Store)
+    const {cart} = state;
   return (
     <>
       <Head>
@@ -23,6 +26,14 @@ const Layout = ({ title, children }) => {
                     <Link href={'/attar'}><a className='p-2'>Attar</a></Link>
                     <Link href={'/brands'}><a className='p-2'>Brands</a></Link>
                     <Link href={'/special-offers'}><a className='p-2'>Special Offers</a></Link>
+                    <Link href={'/cart'}><a className='p-2'>Cart 
+                        {cart.cartItems.length > 0 && (
+                            <span className='ml-1 rounded-full px-2 py-1 bg-red-600 text-xs font-bold text-white'>
+                                {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                            </span>
+                        )}
+                        </a></Link>
+                    <Link href={'/login'}><a className='p-2'>Login</a></Link>
                 </div>
             </nav>
         </header>

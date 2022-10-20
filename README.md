@@ -26,3 +26,12 @@
 - Create 3 columns
 - Show image in 1st col and info in 2nd col
 - Show add to cart option in 3rd col
+
+# Handle Add to cart
+
+- Define react context
+- Define cart items state
+- Create add to cart action
+- Add reducer
+- Create store provider
+- Handle add to cart button
