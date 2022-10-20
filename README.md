@@ -13,3 +13,9 @@
 - Add main section
 - Add footer
 - Add tailwind classes
+
+# Create Products List
+
+- Add data.js
+- Add images
+- Render products
