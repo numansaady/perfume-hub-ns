@@ -19,3 +19,10 @@
 - Add data.js
 - Add images
 - Render products
+
+# Create Product Details Page
+
+- Create Product Page
+- Create 3 columns
+- Show image in 1st col and info in 2nd col
+- Show add to cart option in 3rd col
