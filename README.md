@@ -47,3 +47,8 @@
 
 - Add select box for quantity
 - Handle select box change
+
+# Save Cart Items in Cookie
+
+- Install js-cookie package
+- Save and retrieve cart items in cookie

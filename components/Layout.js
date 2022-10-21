@@ -1,12 +1,17 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from 'next/head';
 import Link from 'next/link';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Store } from '../utils/Store';
 
 const Layout = ({ title, children }) => {
-    const {state} = useContext(Store)
+    const {state} = useContext(Store);
+    const [cartItemCount, setCartItemCount] = useState(0);
     const {cart} = state;
+    useEffect(() => {
+      setCartItemCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0))
+    }, [cart.cartItems])
+    
   return (
     <>
       <Head>
@@ -27,9 +32,9 @@ const Layout = ({ title, children }) => {
                     <Link href={'/brands'}><a className='p-2'>Brands</a></Link>
                     <Link href={'/special-offers'}><a className='p-2'>Special Offers</a></Link>
                     <Link href={'/cart'}><a className='p-2'>Cart 
-                        {cart.cartItems.length > 0 && (
+                        {cartItemCount > 0 && (
                             <span className='ml-1 rounded-full px-2 py-1 bg-red-600 text-xs font-bold text-white'>
-                                {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                                {cartItemCount}
                             </span>
                         )}
                         </a></Link>
