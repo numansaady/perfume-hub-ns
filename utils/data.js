@@ -1,4 +1,20 @@
+import bcrypt from 'bcryptjs';
+
 const data = {
+    users : [
+        {
+            name: 'John',
+            email: 'admin@abc.com',
+            password: bcrypt.hashSync('123456'),
+            isAdmin: true,
+        },
+        {
+            name: 'Doe',
+            email: 'user@abc.com',
+            password: bcrypt.hashSync('123456'),
+            isAdmin: false,
+        },
+    ],
     products : [
         {
             name: 'Al Haramain White Oudh 15ML',
