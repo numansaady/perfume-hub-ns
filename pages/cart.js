@@ -12,19 +12,23 @@ const CartScreen = () => {
     cart: { cartItems },
   } = state;
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const removeItemHandler = (item) => {
-    dispatch({type: 'CART_REMOVE_ITEM', payload: item})
+  const updateCartHandler = (item, qty) => {
+    const quantity = Number(qty);
+    dispatch({type: 'CART_ADD_ITEM', payload: {...item, quantity}})
   }
+  const removeItemHandler = (item) => {
+    dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+  };
   return (
     <Layout title={'Shopping Cart'}>
       <h1 className="text-4xl text-center mb-8">Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <div>
           Cart is empty, You can buy from
-          <Link href={'/product'}>
-            <a>Shopping Page</a>
+          <Link href={'/'}>
+            <a className='text-amber-400 font-bold'> Shopping Page</a>
           </Link>
         </div>
       ) : (
@@ -56,28 +60,49 @@ const CartScreen = () => {
                         </a>
                       </Link>
                     </td>
-                    <td className='p-5 text-right'>{item.quantity}</td>
-                    <td className='p-5 text-right'>${item.price}</td>
-                    <td className='p-5 text-center'>
-                        <button onClick={()=> removeItemHandler(item)}>
-                        <HiOutlineXCircle className='h-5 w-5'/>
-                        </button>
+                    <td className="p-5 text-right">
+                      <select
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateCartHandler(item, e.target.value)
+                        }
+                        className="bg-white"
+                      >
+                        {[...Array(item.countInStock).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="p-5 text-right">${item.price}</td>
+                    <td className="p-5 text-center">
+                      <button onClick={() => removeItemHandler(item)}>
+                        <HiOutlineXCircle className="h-5 w-5" />
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className='card p-5'>
-              <ul>
-                <li>
-                  <div className='pb-3'>Subtotal ( {cartItems.reduce((a, c) => a + c.quantity, 0)} ) {' '} : ${cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
-                  </div>
-                </li>
-                <li>
-                  <button onClick={()=> router.push('/shipping')} className='primary-button w-full'>Check Out</button>
-                </li>
-              </ul>
+          <div className="card p-5">
+            <ul>
+              <li>
+                <div className="pb-3">
+                  Subtotal ( {cartItems.reduce((a, c) => a + c.quantity, 0)} ) :
+                  ${cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
+                </div>
+              </li>
+              <li>
+                <button
+                  onClick={() => router.push('/shipping')}
+                  className="primary-button w-full"
+                >
+                  Check Out
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       )}
