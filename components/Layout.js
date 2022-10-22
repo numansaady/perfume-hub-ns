@@ -33,7 +33,7 @@ const Layout = ({ title, children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ToastContainer position="top-right" limit={1} />
+      <ToastContainer position="top-right" />
 
       <div className="flex min-h-screen flex-col justify-between">
         <header>

@@ -94,3 +94,9 @@
 
 - Create Product model
 - Insert sample products in mongoDB
+
+# Load products from mongoDB
+
+- Load products from mongoDB to Home Page
+- Load products from mongoDB to Products Page
+- Use product api to check products count in stock in add to cart
