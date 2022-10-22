@@ -79,3 +79,8 @@
 - Check user authentication
 - Install headlessui
 - Show user menu
+
+# Create Shipping Page
+
+- Display address fields
+- Save address in context
