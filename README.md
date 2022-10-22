@@ -84,3 +84,8 @@
 
 - Display address fields
 - Save address in context
+
+# Create Payment Method
+
+- Display payment methods
+- Save payment in context
