@@ -11,7 +11,7 @@ body {
 }
 
 a {
-  color: inherit;
+  @apply text-blue-600 hover:text-blue-800;
   text-decoration: none;
 }
 
@@ -41,4 +41,8 @@ input,
 select,
 textarea {
   @apply rounded border p-2 ring-indigo-300 outline-none focus:ring bg-slate-200;
+}
+
+.dropdown-link {
+  @apply flex p-2 bg-slate-50 hover:bg-gray-200;
 }

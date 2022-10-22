@@ -73,3 +73,9 @@
 - Created nextauth.js
 - Implement signin for credentials
 - Use signin in login form
+
+# Create User Menu
+
+- Check user authentication
+- Install headlessui
+- Show user menu
