@@ -89,3 +89,8 @@
 
 - Display payment methods
 - Save payment in context
+
+# Inser product to mongoDB
+
+- Create Product model
+- Insert sample products in mongoDB
