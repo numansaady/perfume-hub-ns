@@ -100,3 +100,10 @@
 - Load products from mongoDB to Home Page
 - Load products from mongoDB to Products Page
 - Use product api to check products count in stock in add to cart
+
+# Create Place Order Page
+
+- Display shipping address
+- Display payment method
+- Display order items
+- Implement create order

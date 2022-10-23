@@ -26,7 +26,7 @@ const PaymentScreen = () => {
         paymentMethod: selectedPaymentMethod,
       })
     );
-    router.push('/place-order')
+    router.push('/placeorder');
   };
 
   useEffect(() => {
