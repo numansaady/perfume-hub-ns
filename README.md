@@ -107,3 +107,9 @@
 - Display payment method
 - Display order items
 - Implement create order
+
+# Create Order Page
+
+- Implement backend api for order details
+- Load order data from backend
+- Display order details

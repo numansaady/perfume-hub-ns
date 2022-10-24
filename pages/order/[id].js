@@ -1,71 +1,73 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import CheckoutWizard from '../components/CheckoutWizard';
-import Layout from '../components/Layout';
-import { getError } from '../utils/error';
-import { Store } from '../utils/Store';
+import React, { useEffect, useReducer } from 'react';
+import Layout from '../../components/Layout';
+import { getError } from '../../utils/error';
 
-const PlaceOrderScreen = () => {
-  const { state, dispatch } = useContext(Store);
-  const { cart } = state;
-  const { cartItems, shippingAddress, paymentMethod } = cart;
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'FETCH_REQUEST':
+      return { ...state, loading: true, error: '' };
 
-  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
-  const itemsPrice = round2(
-    cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
-  );
+    case 'FETCH_SUCCESS':
+      return { ...state, loading: false, order: action.payload, error: '' };
 
-  const shippingPrice = itemsPrice > 300 ? 0 : 10;
-  const taxPrice = round2(itemsPrice * 0.15);
-  const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
+    case 'FETCH_FAIL':
+      return { ...state, loading: false, error: action.payload };
 
-  const router = useRouter();
+    default:
+      return state;
+  }
+};
+
+const OrderScreen = () => {
+  const { query } = useRouter();
+  const orderid = query.id;
+
+  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
+    loading: true,
+    order: {},
+    error: '',
+  });
+
   useEffect(() => {
-    if (!paymentMethod) {
-      router.push('/payment');
+    const fetchOrder = async () => {
+      try {
+        dispatch({ type: 'FETCH_REQUEST' });
+        const { data } = await axios.get(`/api/orders/${orderid}`);
+        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+      } catch (err) {
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+      }
+    };
+    if (!order._id || (order._id && order._id !== orderid)) {
+      fetchOrder();
     }
-  }, [paymentMethod, router]);
+  }, [order, orderid]);
 
-  const [loading, setLoading] = useState(false);
-
-  const placeOrderHandler = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.post('/api/orders', {
-        orderItems: cartItems,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice,
-        shippingPrice,
-        taxPrice,
-        totalPrice,
-      });
-      setLoading(false);
-      dispatch({ type: 'CART_CLEAR_ITEMS' });
-      Cookies.set('cart', {
-        ...cart,
-        cartItems: [],
-      });
-      router.push(`/order/${data._id}`);
-    } catch (err) {
-      setLoading(false);
-      toast.error(getError(err));
-    }
-  };
+  const {
+    orderItems,
+    shippingAddress,
+    paymentMethod,
+    itemsPrice,
+    shippingPrice,
+    taxPrice,
+    totalPrice,
+    isPaid,
+    isDelivered,
+    paidAt,
+    deliveredAt,
+  } = order;
 
   return (
-    <Layout title={'Place Oreder'}>
-      <CheckoutWizard activeStep={3} />
-      <h1 className="mb-4 text-xl">Place Order</h1>
-      {cartItems.length === 0 ? (
-        <div>
-          Cart is empty! You can buy in <Link href={'/'}> Shopping Page</Link>
-        </div>
+    <Layout title={`Order ${orderid}`}>
+      <h1 className="mb-4 text-xl">{`Order ID: ${orderid}`}</h1>
+      {loading ? (
+        <div>Loading....</div>
+      ) : error ? (
+        <div className="alert-error">{error}</div>
       ) : (
         <div className="grid md:grid-cols-4 md:gap-5">
           <div className="overflow-x-auto md:col-span-3">
@@ -76,15 +78,26 @@ const PlaceOrderScreen = () => {
                 {shippingAddress.city}, {shippingAddress.postalCode},{' '}
                 {shippingAddress.country}
               </div>
-              <div>
-                <Link href={'/shipping'}>Edit</Link>
-              </div>
+              {isDelivered ? (
+                <div className="alert-success">
+                  Delivered successfully at {deliveredAt}
+                </div>
+              ) : (
+                <div className="alert-error">Not Delivered</div>
+              )}
             </div>
             <div className="card p-5">
               <h2 className="mb-2 text-lg">Payment Method</h2>
               <div>{paymentMethod}</div>
-              <Link href={'/payment'}>Edit</Link>
+              {isPaid ? (
+                <div className="alert-success">
+                  Paid at {paidAt}
+                </div>
+              ) : (
+                <div className="alert-error">Not Paid</div>
+              )}
             </div>
+
             <div className="card overflow-x-auto p-5">
               <h2 className="mb-2 text-lg">Order Items</h2>
               <table className="min-w-full">
@@ -97,7 +110,7 @@ const PlaceOrderScreen = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cartItems.map((item) => (
+                  {orderItems.map((item) => (
                     <tr key={item._id} className="border-b">
                       <td>
                         <Link href={`/product/${item.slug}`}>
@@ -122,9 +135,6 @@ const PlaceOrderScreen = () => {
                   ))}
                 </tbody>
               </table>
-              <div>
-                <Link href={'/cart'}>Edit</Link>
-              </div>
             </div>
           </div>
 
@@ -156,15 +166,7 @@ const PlaceOrderScreen = () => {
                     <div>${totalPrice}</div>
                   </div>
                 </li>
-                <li>
-                  <button
-                    className="primary-button w-full"
-                    disabled={loading}
-                    onClick={placeOrderHandler}
-                  >
-                    {loading ? 'Loading' : 'Place Order'}
-                  </button>
-                </li>
+                
               </ul>
             </div>
           </div>
@@ -174,6 +176,6 @@ const PlaceOrderScreen = () => {
   );
 };
 
-PlaceOrderScreen.auth = true;
+OrderScreen.auth = true;
 
-export default PlaceOrderScreen;
+export default OrderScreen;
