@@ -31,7 +31,7 @@ export default NextAuth({
           email: credentials.email,
         });
         await db.disconnect();
-        // credentials data form client side and user data from databse
+        // credentials data from client side and user data from databse
         if (user && bcrypt.compareSync(credentials.password, user.password)) {
           // return data from database
           return {

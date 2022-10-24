@@ -113,3 +113,9 @@
 - Implement backend api for order details
 - Load order data from backend
 - Display order details
+
+# Create Register Page
+
+- Add signup api
+- Create Register page
+- Call api on form submit
