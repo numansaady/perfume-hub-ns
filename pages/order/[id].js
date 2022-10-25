@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import Layout from '../../components/Layout';
-import { getError } from '../../utils/error';
+import getError from '../../utils/error';
 
 const reducer = (state, action) => {
   switch (action.type) {
