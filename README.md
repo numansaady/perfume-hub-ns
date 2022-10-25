@@ -119,3 +119,15 @@
 - Add signup api
 - Create Register page
 - Call api on form submit
+
+# Add PayPal payment method
+
+- Add paypal payment button
+- Handle payment
+- Create backend api
+- Update order state
+
+# Add Order History Page
+
+- Add History page
+- Display Orders by User

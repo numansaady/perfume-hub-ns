@@ -47,10 +47,13 @@ const PlaceOrderScreen = () => {
       });
       setLoading(false);
       dispatch({ type: 'CART_CLEAR_ITEMS' });
-      Cookies.set('cart', {
-        ...cart,
-        cartItems: [],
-      });
+      Cookies.set(
+        'cart',
+        JSON.stringify({
+          ...cart,
+          cartItems: [],
+        })
+      );
       router.push(`/order/${data._id}`);
     } catch (err) {
       setLoading(false);

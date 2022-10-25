@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import User from '../../../models/User';
@@ -9,15 +9,15 @@ export default NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
+    // user comes from db and token form nextauth
+    // it is checked by user
     async jwt({ token, user }) {
-      // user comes from db and token form nextauth
-      // it is checked by user
       if (user?._id) token._id = user._id;
       if (user?.isAdmin) token.isAdmin = user.isAdmin;
       return token;
     },
+    // it is checked by token
     async session({ session, token }) {
-      // it is checked by token
       if (token?._id) session.user._id = token._id;
       if (token?.isAdmin) session.user.isAdmin = token.isAdmin;
       return session;
@@ -32,7 +32,7 @@ export default NextAuth({
         });
         await db.disconnect();
         // credentials data from client side and user data from databse
-        if (user && bcrypt.compareSync(credentials.password, user.password)) {
+        if (user && bcryptjs.compareSync(credentials.password, user.password)) {
           // return data from database
           return {
             _id: user._id,

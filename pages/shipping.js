@@ -27,26 +27,28 @@ const ShippingScreen = () => {
       setValue('country', shippingAddress.country);
     }, [setValue, shippingAddress])
     
-  const submitHandler = ({ fullname, address, city, postalCode, country }) => {
-    dispatch({
-      type: 'SAVE_SHIPPING_ADDRESS',
-      payload: { fullname, address, city, postalCode, country },
-    });
-    Cookies.set(
-      'cart',
-      JSON.stringify({
-        ...cart,
-        shippingAddress: {
-          fullname,
-          address,
-          city,
-          postalCode,
-          country,
-        },
-      })
-    );
-    router.push('/payment')
-  };
+    const submitHandler = ({ fullname, address, city, postalCode, country }) => {
+      dispatch({
+        type: 'SAVE_SHIPPING_ADDRESS',
+        payload: { fullname, address, city, postalCode, country },
+      });
+      Cookies.set(
+        'cart',
+        JSON.stringify({
+          ...cart,
+          shippingAddress: {
+            fullname,
+            address,
+            city,
+            postalCode,
+            country,
+          },
+        })
+      );
+  
+      router.push('/payment');
+    };
+    
   return (
     <Layout title="Shipping Address">
       <CheckoutWizard activeStep={1} />
