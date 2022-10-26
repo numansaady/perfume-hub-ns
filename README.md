@@ -131,3 +131,9 @@
 
 - Add History page
 - Display Orders by User
+
+# Update User Data
+
+- Create Profile page
+- Display User Data
+- Handle update user data
