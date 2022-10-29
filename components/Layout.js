@@ -35,7 +35,7 @@ const Layout = ({ title, children }) => {
 
       <ToastContainer position="top-right" />
 
-      <div className="flex min-h-screen flex-col justify-between">
+      <div className="flex min-h-screen flex-col justify-between px-20">
         <header>
           <nav className="flex h-12 justify-between items-center shadow-md px-5">
             <Link href={'/'}>

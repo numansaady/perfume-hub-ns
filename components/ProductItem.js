@@ -4,7 +4,7 @@ import React from 'react';
 
 const ProductItem = ({ product, handleAddToCart }) => {
   return (
-    <div className="card">
+    <div className="card bg-slate-50 hover:shadow-xl">
       <Link href={`/product/${product.slug}`}>
         <a>
           <img

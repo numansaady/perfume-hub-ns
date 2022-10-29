@@ -3,8 +3,9 @@
 ## Techonology
 
 - Next.js
+- Next Auth
 - tailwind css
--
+- MongoDB
 
 # Create website layout
 
