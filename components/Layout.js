@@ -30,29 +30,55 @@ const Layout = ({ title, children }) => {
 
   const menuItems = (
     <>
-      <li className={router.pathname == '/' ? 'btn btn-active btn-info rounded' : ''}>
+      <li
+        className={
+          router.pathname == '/' ? 'btn btn-active btn-info rounded' : ''
+        }
+      >
         <Link href={'/'}>
           <a className="p-2">Home</a>
         </Link>
       </li>
       {session?.user && (
-        <li className={router.pathname == '/dashboard' ? 'btn btn-active btn-info rounded' : ''}>
+        <li
+          className={
+            router.pathname == '/dashboard'
+              ? 'btn btn-active btn-info rounded'
+              : ''
+          }
+        >
           <Link href={'/dashboard'}>
             <a className="p-2">Dashboard</a>
           </Link>
         </li>
       )}
-      <li className={router.pathname == '/women-perfume' ? 'btn btn-active btn-info rounded' : ''}>
+      <li
+        className={
+          router.pathname == '/women-perfume'
+            ? 'btn btn-active btn-info rounded'
+            : ''
+        }
+      >
         <Link href={'/women-perfume'}>
           <a className="p-2">Women's Perfume</a>
         </Link>
       </li>
-      <li className={router.pathname == '/men-perfume' ? 'btn btn-active btn-info rounded' : ''}>
+      <li
+        className={
+          router.pathname == '/men-perfume'
+            ? 'btn btn-active btn-info rounded'
+            : ''
+        }
+      >
         <Link href={'/men-perfume'}>
           <a className="p-2">Men's Perfume</a>
         </Link>
       </li>
-      <li className={router.pathname == '/attar' ? 'btn btn-active btn-info rounded' : ''}>
+      <li
+        className={
+          router.pathname == '/attar' ? 'btn btn-active btn-info rounded' : ''
+        }
+      >
         <Link href={'/attar'}>
           <a className="p-2">Attar</a>
         </Link>
@@ -72,7 +98,7 @@ const Layout = ({ title, children }) => {
 
       <div className="flex min-h-screen flex-col justify-between">
         <header>
-          <div className="navbar myNav bg-blue-100 md:px-10 lg:px-20">
+          <div className="navbar bg-blue-100 md:px-10 lg:px-20">
             <div className="navbar-start">
               <div className="dropdown">
                 <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -205,10 +231,30 @@ const Layout = ({ title, children }) => {
                   </Link>
                 )}
               </div>
+              <label
+                tabIndex={0}
+                htmlFor="drawer-sidebar-mobile"
+                className="btn btn-ghost lg:hidden"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h8m-8 6h16"
+                  />
+                </svg>
+              </label>
             </div>
           </div>
         </header>
-        <main className="container m-auto mt-4 px-4">{children}</main>
+        <main className="container m-auto mt-4">{children}</main>
 
         <footer className="flex bg-blue-100 justify-center items-center h-10 shadow-inner">
           <p>Copyright &copy; 2022 Perfume Hub</p>
