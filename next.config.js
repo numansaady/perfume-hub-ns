@@ -5,3 +5,9 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
+
+module.exports = {
+  images: {
+    domains: ['https://placeimg.com'],
+  },
+}

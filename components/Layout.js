@@ -1,29 +1,64 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Menu } from '@headlessui/react';
 import Cookies from 'js-cookie';
 import { signOut, useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Store } from '../utils/Store';
-import DropdownLink from './DropdownLink';
 
 const Layout = ({ title, children }) => {
   const { status, data: session } = useSession();
+  const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const [cartItemCount, setCartItemCount] = useState(0);
   const { cart } = state;
+  const { cartItems } = cart;
   useEffect(() => {
-    setCartItemCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
-  }, [cart.cartItems]);
+    setCartItemCount(cartItems.reduce((a, c) => a + c.quantity, 0));
+  }, [cartItems]);
 
   const logoutClickHandler = () => {
-    Cookies.remove('cart')
-    dispatch({type: 'CART_RESET'})
+    Cookies.remove('cart');
+    dispatch({ type: 'CART_RESET' });
     signOut({ callbackUrl: '/login' });
   };
+
+  const menuItems = (
+    <>
+      <li className={router.pathname == '/' ? 'btn btn-active btn-info rounded' : ''}>
+        <Link href={'/'}>
+          <a className="p-2">Home</a>
+        </Link>
+      </li>
+      {session?.user && (
+        <li className={router.pathname == '/dashboard' ? 'btn btn-active btn-info rounded' : ''}>
+          <Link href={'/dashboard'}>
+            <a className="p-2">Dashboard</a>
+          </Link>
+        </li>
+      )}
+      <li className={router.pathname == '/women-perfume' ? 'btn btn-active btn-info rounded' : ''}>
+        <Link href={'/women-perfume'}>
+          <a className="p-2">Women's Perfume</a>
+        </Link>
+      </li>
+      <li className={router.pathname == '/men-perfume' ? 'btn btn-active btn-info rounded' : ''}>
+        <Link href={'/men-perfume'}>
+          <a className="p-2">Men's Perfume</a>
+        </Link>
+      </li>
+      <li className={router.pathname == '/attar' ? 'btn btn-active btn-info rounded' : ''}>
+        <Link href={'/attar'}>
+          <a className="p-2">Attar</a>
+        </Link>
+      </li>
+    </>
+  );
 
   return (
     <>
@@ -35,82 +70,147 @@ const Layout = ({ title, children }) => {
 
       <ToastContainer position="top-right" />
 
-      <div className="flex min-h-screen flex-col justify-between px-20">
+      <div className="flex min-h-screen flex-col justify-between">
         <header>
-          <nav className="flex h-12 justify-between items-center shadow-md px-5">
-            <Link href={'/'}>
-              <a className="text-lg font-bold py-4">perfume-hub</a>
-            </Link>
-
-            <div>
-              <Link href={'/women-perfume'}>
-                <a className="p-2">Women's Perfume</a>
+          <div className="navbar myNav bg-blue-100 md:px-10 lg:px-20">
+            <div className="navbar-start">
+              <div className="dropdown">
+                <label tabIndex={0} className="btn btn-ghost lg:hidden">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h8m-8 6h16"
+                    />
+                  </svg>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  {menuItems}
+                </ul>
+              </div>
+              <Link href={'/'}>
+                <a className="btn btn-ghost uppercase text-xl">Perfume Hub</a>
               </Link>
-              <Link href={'/men-perfume'}>
-                <a className="p-2">Men's Perfume</a>
-              </Link>
-              <Link href={'/attar'}>
-                <a className="p-2">Attar</a>
-              </Link>
-              <Link href={'/brands'}>
-                <a className="p-2">Brands</a>
-              </Link>
-              <Link href={'/special-offers'}>
-                <a className="p-2">Special Offers</a>
-              </Link>
-              <Link href={'/cart'}>
-                <a className="p-2">
-                  Cart
-                  {cartItemCount > 0 && (
-                    <span className="ml-1 rounded-full px-2 py-1 bg-red-600 text-xs font-bold text-white">
-                      {cartItemCount}
-                    </span>
-                  )}
-                </a>
-              </Link>
-              {status === 'loading' ? (
-                'Loading'
-              ) : session?.user ? (
-                <Menu as="div" className="relative inline-block">
-                  <Menu.Button className="text-blue-600">
-                    {session.user.name}
-                  </Menu.Button>
-                  <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg">
-                    <Menu.Item>
-                      <DropdownLink className="dropdown-link" href="/profile">
-                        Profile
-                      </DropdownLink>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <DropdownLink
-                        className="dropdown-link"
-                        href="/order-history"
-                      >
-                        Order History
-                      </DropdownLink>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <a
-                        className="dropdown-link"
-                        href="#"
-                        onClick={logoutClickHandler}
-                      >
-                        Logout
-                      </a>
-                    </Menu.Item>
-                  </Menu.Items>
-                </Menu>
-              ) : (
-                <Link href={'/login'}>
-                  <a className="p-2">Login</a>
-                </Link>
-              )}
             </div>
-          </nav>
+            <div className="navbar-center hidden lg:flex">
+              <ul className="menu menu-horizontal p-0">{menuItems}</ul>
+            </div>
+            <div className="navbar-end">
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="btn btn-ghost btn-circle">
+                  <div className="indicator">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                    <span className="badge badge-sm indicator-item">
+                      {cartItemCount > 0 ? cartItemCount : '0'}
+                    </span>
+                  </div>
+                </label>
+                <div
+                  tabIndex={0}
+                  className="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow"
+                >
+                  <div className="card-body">
+                    <span className="font-bold text-lg">
+                      Items:{' '}
+                      {cartItems.length > 0
+                        ? cartItems.reduce((a, c) => a + c.quantity, 0) +
+                          ' Items'
+                        : '0 Item'}
+                    </span>
+                    <span className="text-info">
+                      Subtotal:{' '}
+                      {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
+                    </span>
+                    <div className="card-actions">
+                      <button className="btn btn-primary btn-block">
+                        <Link href={'/cart'}> View cart </Link>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="dropdown dropdown-end">
+                {status === 'loading' ? (
+                  'Loading'
+                ) : session?.user ? (
+                  <>
+                    <div className="flex items-center">
+                      <label
+                        tabIndex={0}
+                        className="btn btn-ghost btn-circle avatar"
+                      >
+                        <div className="w-10 rounded-full">
+                          <Image
+                            src="/../public/images/people.jpg"
+                            alt="user avatar"
+                            width={50}
+                            height={50}
+                          />
+                        </div>
+                      </label>
+                      <span className="p-2 font-bold">
+                        {session?.user?.name}
+                      </span>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-blue-100 rounded-box w-52"
+                    >
+                      <li>
+                        <Link href="/profile">
+                          <a className="justify-between">
+                            Profile
+                            <span className="badge">New</span>
+                          </a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/order-history">
+                          <a>Order History</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={'#'}>
+                          <a onClick={logoutClickHandler}>Logout</a>
+                        </Link>
+                      </li>
+                    </ul>
+                  </>
+                ) : (
+                  <Link href={'/login'}>
+                    <a className="p-2">Login</a>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
         </header>
         <main className="container m-auto mt-4 px-4">{children}</main>
 
-        <footer className="flex justify-center items-center h-10 shadow-inner">
+        <footer className="flex bg-blue-100 justify-center items-center h-10 shadow-inner">
           <p>Copyright &copy; 2022 Perfume Hub</p>
         </footer>
       </div>
@@ -118,4 +218,4 @@ const Layout = ({ title, children }) => {
   );
 };
 
-export default Layout;
+export default dynamic(() => Promise.resolve(Layout), { ssr: false });

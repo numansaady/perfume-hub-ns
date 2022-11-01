@@ -4,13 +4,13 @@ import React from 'react';
 
 const ProductItem = ({ product, handleAddToCart }) => {
   return (
-    <div className="card bg-slate-50 hover:shadow-xl">
+    <div className="product-item card bg-slate-50 hover:shadow-xl">
       <Link href={`/product/${product.slug}`}>
         <a>
           <img
             src={product.image}
             alt={product.name}
-            className="rounded shadow block mx-auto"
+            className="rounded shadow block mt-4 mx-auto"
           />
         </a>
       </Link>
@@ -18,11 +18,11 @@ const ProductItem = ({ product, handleAddToCart }) => {
       <div className="flex flex-col justify-center items-center p-5">
         <Link href={`/product/${product.slug}`}>
           <a>
-            <h2 className="text-lg">{product.name}</h2>
+            <h2 className="text-lg"><strong>{product.name}</strong></h2>
           </a>
         </Link>
-        <p className="mb-2">{product.brand}</p>
-        <p>${product.price}</p>
+        <p className="mb-2"><strong>Brand : </strong>{product.brand}</p>
+        <p className="mb-2"><strong>Price : </strong>${product.price}</p>
         <button
           className="primary-button"
           type="button"
